@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Access token</h1>
+<h3 class="accessOld"></h3>
+<h3 class="accessResult"></h3>
+<h1>Refresh token</h1>
+<h3 class="refreshOld"></h3>
+<h3 class="refreshResult"></h3>
+<button class="btn1">Refresh</button>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const oldAccessToken = localStorage.getItem("accessToken");
+    const oldRefreshToken = localStorage.getItem("refreshToken");
+
+    console.log("local accessToken=" + oldAccessToken.substring(140));
+    console.log("local refreshToken=" + oldRefreshToken.substring(140));
+
+  document.querySelector(".accessOld").innerHTML = oldAccessToken;
+  document.querySelector(".refreshOld").innerHTML = oldRefreshToken;
+
+  document.querySelector(".btn1").addEventListener("click", () => {
+      axios.post('http://localhost:8081/refreshToken',
+      {accessToken: oldAccessToken, refreshToken: oldRefreshToken})
+      .then(res => {
+          console.log(res.data);
+
+          const newAccessToken = res.data.accessToken;
+          const newRefreshToken = res.data.refreshToken;
+
+          console.log("new accessToken="+newAccessToken.substring(140));
+          console.log("new refreshToken="+newRefreshToken.substring(140));
+
+          document.querySelector(".accessResult").innerHTML = oldAccessToken != newAccessToken ? newAccessToken : 'OLD';
+          document.querySelector(".refreshResult").innerHTML = oldRefreshToken != newRefreshToken ? newRefreshToken : 'OLD';;
+          //console.log(res.data.accessToken);
+          //console.log(res.data.refreshToken);
+
+      }).catch(error => {
+          console.error(error);
+      });
+
+  }, false);
+</script>
+</body>
+</html>
