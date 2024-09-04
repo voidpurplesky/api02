@@ -15,4 +15,10 @@ public class SampleController {
     public List<String> doA() {
         return Arrays.asList("AAA", "BBB", "CCC");
     }
+
+    @GetMapping("/")
+    public String index() {
+        System.out.println("index&&");
+        return "index^^";
+    }
 }

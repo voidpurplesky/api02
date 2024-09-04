@@ -44,6 +44,7 @@ public class JWTUtil {
 
     // p801
     public Map<String, Object> validateToken(String token) throws JwtException {
+
         Map<String, Object> claim = null;
 
         claim = Jwts.parser()

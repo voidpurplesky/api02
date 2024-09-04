@@ -80,7 +80,6 @@ public class CustomSecurityConfig {
 
         http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
-
         // p809 TokenCheckFilter
         http.addFilterBefore(tokenCheckFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         // 821 refreshToken
@@ -91,6 +90,7 @@ public class CustomSecurityConfig {
         http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         //850
+
         http.cors(httpSecurityCorsConfigurer -> {
             httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
         });
@@ -100,13 +100,17 @@ public class CustomSecurityConfig {
     private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil) {
         return new TokenCheckFilter(jwtUtil);
     }
-/*
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "PUT", "DELETE"));
+        //configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:8082"));
+        //configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE"));
+        //configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        //configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);
 
@@ -114,16 +118,17 @@ public class CustomSecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-*/
 
+/*
     public CorsConfigurationSource corsConfigurationSource() {
         return request -> {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowedHeaders(Collections.singletonList("*"));
             configuration.setAllowedMethods(Collections.singletonList("*"));
-            configuration.setAllowedOriginPatterns(Collections.singletonList("http://localhost:8081"));
+            configuration.setAllowedOriginPatterns(Collections.singletonList("http://localhost:8082"));
             configuration.setAllowCredentials(true);
             return configuration;
         };
     }
+ */
 }
